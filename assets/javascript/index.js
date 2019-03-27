@@ -1,4 +1,7 @@
 $(document).ready(function () {
+
+    let mesImages = new Images();
+
     // On utilise autocomplete afin de proposer automatiquement des suggestions pour l'input de l'utilisateur
     $("#nomCommune").autocomplete({
         source: function (req, response) {
@@ -23,20 +26,48 @@ $(document).ready(function () {
                     }
                 )
                 .catch(function (err) {
-                    console.log("Erreur de Fetch: ", err);
+                    console.log("Erreur de Fetch sur l'autocompletion: ", err);
                 });
         },
         minLength: 3 // Le nombre minimum de caracteres a taper avant que les suggestions apparaissent
     });
 
+    // Pour setup les tabs
     $("#vues").tabs({
-        active: 1
+        active: 0
     });
 
-    // Getter
-    var active = $("#vues").tabs("option", "active");
+    // Au click sur l'icone
+    $("#boutonRecherche").click(function () {
+        mesImages = new Images();
+        $("#photo").empty(); // On vide les images avant d'en ajouter de nouvelles
 
-    // Setter
-    $("#vues").tabs("option", "active", 1);
+        // On retrouve les photos
+        fetch("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca403b53ea426ebac5643c0211488a76" +
+            "&tags=" + $("#nomCommune").val() +
+            "&per_page=" + $("#nbPhotos").val() +
+            "&format=json&nojsoncallback=1")
+            .then(
+                function (response) {
+                    if (response.status !== 200) {
+                        console.log("Probleme avec la requete pour trouver les photos. Code de status : " + response.status);
+                        return;
+                    }
+
+                    response.json().then(
+                        function (data) {
+                            // Nous parcourons le resultat de la requete pour recuperer les infos dont nous avons besoins
+                            data.photos.photo.forEach(function (photo) {
+                                // Nous gardons les images en mémoire pour plus tard
+                                let monImage = new Image(photo.farm, photo.server, photo.id, photo.secret);
+                                mesImages.add(monImage);
+                                $("#photo").append("<img src="+monImage.getUrl()+"/>"); // Nous ajontons les images dans la page.
+                            })
+                        })
+                })
+            .catch(function (err) {
+                console.log("Erreur de Fetch sur la recherche et l'affichage d'image");
+            });
+    });
 
 });
