@@ -15,7 +15,7 @@ $(document).ready(function () {
                         responseFetch.json().then(
                             function (data) {
                                 // Ici on recupere le nom de la commune
-                                const resultat = data.map( function (item) {
+                                const resultat = data.map(function (item) {
                                     return item.nom;
                                 });
                                 response(resultat);
@@ -26,6 +26,17 @@ $(document).ready(function () {
                     console.log("Erreur de Fetch: ", err);
                 });
         },
-        minLength:3 // Le nombre minimum de caracteres a taper avant que les suggestions apparaissent
-    })
+        minLength: 3 // Le nombre minimum de caracteres a taper avant que les suggestions apparaissent
+    });
+
+    $("#vues").tabs({
+        active: 1
+    });
+
+    // Getter
+    var active = $("#vues").tabs("option", "active");
+
+    // Setter
+    $("#vues").tabs("option", "active", 1);
+
 });
