@@ -59,9 +59,11 @@ $(document).ready(function () {
                             // Nous parcourons le resultat de la requete pour recuperer les infos dont nous avons besoins
                             data.photos.photo.forEach(function (photo) {
                                 // Nous gardons les images en mémoire pour plus tard
-                                let monImage = new Image(photo.farm, photo.server, photo.id, photo.secret);
+                                let monImage = new Image(photo.title,photo.farm, photo.server, photo.id, photo.secret);
                                 mesImages.add(monImage);
-                                $("#photo").append("<img src="+monImage.getUrl()+"/>"); // Nous ajontons les images dans la page.
+                                $("#photo")
+                                    .append("<img id=\"image\" src=" + monImage.getUrl() + "/>") // Nous ajontons les images dans la page.
+                                    .append("<div id=dialogImg title="+ monImage.getTitle() +"></div>")
                             })
                         })
                 })
@@ -70,4 +72,8 @@ $(document).ready(function () {
             });
     });
 
+    $("#dialogImg").dialog({autoOpen:false});
+    $("body").on("click", "#image", function () {
+        $("#dialogImg").dialog("open");
+    })
 });
