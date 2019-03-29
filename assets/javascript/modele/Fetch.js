@@ -32,14 +32,14 @@ class Fetch {
                 console.log("Erreur de Fetch sur l'autocompletion: ", err);
             });
     }
-    
+
     /**
      * Trouve des informations sur une photo
      * @param idPhoto Id de la photo
      * @param secretPhoto Secret de la photo
      */
     static getInfoPhoto(idPhoto, secretPhoto) {
-        fetch("https://api.flickr.com/services/rest/?method=flickr.photos.getInfo" +
+        return fetch("https://api.flickr.com/services/rest/?method=flickr.photos.getInfo" +
             "&api_key=ca403b53ea426ebac5643c0211488a76" +
             "&photo_id=" + idPhoto +
             "&secret=" + secretPhoto +
@@ -48,12 +48,12 @@ class Fetch {
                 // Erreur
                 if (response.status !== 200) {
                     console.log("Problème avec la requete de récuperation des infos de photos. Status code : " + response.status);
-                    return
+                    return;
                 }
 
                 // Pas d'erreur
                 response.json().then(function (data) {
-                    console.log(data);
+                    return data;
                 })
             })
     }

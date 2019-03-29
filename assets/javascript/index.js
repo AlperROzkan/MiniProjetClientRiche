@@ -46,14 +46,37 @@ $(document).ready(function () {
                             // La boite de dialogue
                             $("#dialogImg").dialog({autoOpen: false});
                             $("#image" + i).click(function () {
-                                $("#dialogImg").dialog("open")
+                                $("#dialogImg")
+                                    .dialog("open")
                                     .dialog({
                                         title: monImage.getTitle()
                                     })
-                                    .empty() // On la vide avant de mettre des elements dedans
-                                    .append();
+                                    .empty();
+
+                                fetch("https://api.flickr.com/services/rest/?method=flickr.photos.getInfo" +
+                                    "&api_key=ca403b53ea426ebac5643c0211488a76" +
+                                    "&photo_id=" + monImage.getId() +
+                                    "&secret=" + monImage.getSecret() +
+                                    "&format=json&nojsoncallback=1")
+                                    .then(function (response) {
+                                        // Erreur
+                                        if (response.status !== 200) {
+                                            console.log("Problème avec la requete de récuperation des infos de photos. Status code : " + response.status);
+                                            return;
+                                        }
+
+                                        // Pas d'erreur
+                                        response.json().then(function (data) {
+                                            $("#dialogImg").append("<div>Timestamp de prise de vue: " + data.photo.dates.taken + "</div>");
+
+                                        })
+                                    })
                             });
+
+
                             i++;
+
+
                         })
                     })
             })
