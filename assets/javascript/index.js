@@ -56,14 +56,22 @@ $(document).ready(function () {
 
                     response.json().then(
                         function (data) {
+                            let i = 0;
                             // Nous parcourons le resultat de la requete pour recuperer les infos dont nous avons besoins
                             data.photos.photo.forEach(function (photo) {
+
                                 // Nous gardons les images en mémoire pour plus tard
-                                let monImage = new Image(photo.title,photo.farm, photo.server, photo.id, photo.secret);
+                                let monImage = new Image(photo.title, photo.farm, photo.server, photo.id, photo.secret);
                                 mesImages.add(monImage);
                                 $("#photo")
-                                    .append("<img id=\"image\" src=" + monImage.getUrl() + "/>") // Nous ajontons les images dans la page.
-                                    .append("<div id=dialogImg title="+ monImage.getTitle() +"></div>")
+                                    .append("<img alt=imageRequete"+i+" id=image"+i+" src=" + monImage.getUrl() + "/>") // Nous ajontons les images dans la page.
+
+                                // La boite de dialogue
+                                $("#dialogImg").dialog({autoOpen: false});
+                                $("#image"+i).click(function () {
+                                    $("#dialogImg").dialog("open");
+                                });
+                                i++;
                             })
                         })
                 })
@@ -72,8 +80,5 @@ $(document).ready(function () {
             });
     });
 
-    $("#dialogImg").dialog({autoOpen:false});
-    $("body").on("click", "#image", function () {
-        $("#dialogImg").dialog("open");
-    })
+
 });
