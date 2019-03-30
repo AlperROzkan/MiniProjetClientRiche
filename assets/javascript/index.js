@@ -13,7 +13,7 @@ $(document).ready(function () {
         active: 0
     });
 
-    // Au click sur l'icone
+    // Au clic sur l'icone
     $("#boutonRecherche").click(function () {
         mesImages = new Images(); // Une liste d'images qui contiendra les images qu'on recupère du fetch
         $("#photo").empty(); // On vide les images avant d'en ajouter de nouvelles
@@ -30,8 +30,7 @@ $(document).ready(function () {
                     return;
                 }
 
-                response.json()
-                    .then(function (data) {
+                response.json().then(function (data) {
                         let i = 0;
                         // Nous parcourons le resultat de la requete pour recuperer les infos dont nous avons besoins
                         data.photos.photo.forEach(function (photo) {
@@ -53,30 +52,16 @@ $(document).ready(function () {
                                     })
                                     .empty();
 
-                                fetch("https://api.flickr.com/services/rest/?method=flickr.photos.getInfo" +
-                                    "&api_key=ca403b53ea426ebac5643c0211488a76" +
-                                    "&photo_id=" + monImage.getId() +
-                                    "&secret=" + monImage.getSecret() +
-                                    "&format=json&nojsoncallback=1")
-                                    .then(function (response) {
-                                        // Erreur
-                                        if (response.status !== 200) {
-                                            console.log("Problème avec la requete de récuperation des infos de photos. Status code : " + response.status);
-                                            return;
-                                        }
-
-                                        // Pas d'erreur
-                                        response.json().then(function (data) {
-                                            $("#dialogImg").append("<div>Timestamp de prise de vue: " + data.photo.dates.taken + "</div>");
-
-                                        })
+                                // Pour recuperer des informations a propos de photos
+                                Fetch.getInfoPhoto(monImage.getId(), monImage.getSecret())
+                                    .then(function (data) {
+                                        // Ici on rajoute des infos sur la boite de dialogue
+                                        $("#dialogImg")
+                                            .append("<div>Timestamp de prise de vue: " + data.photo.dates.taken + "</div>")
+                                            .append("<div>Pseudo de l'uploader : " + data.photo.owner.username + "</div>");
                                     })
                             });
-
-
                             i++;
-
-
                         })
                     })
             })

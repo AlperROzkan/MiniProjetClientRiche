@@ -34,6 +34,28 @@ class Fetch {
     }
 
     /**
+     * Recherche de photos
+     * @param nomCommune Le mot clé de la photo, pour nous, ce sera le nom de la commune
+     * @param nbPhotos le nombre de photos que l'on souhaite
+     * NON FONCTIONNELLE
+     */
+    static searchPhoto(nomCommune, nbPhotos) {
+        fetch("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca403b53ea426ebac5643c0211488a76" +
+            "&tags=" + nomCommune +
+            "&per_page=" + nbPhotos +
+            "&format=json&nojsoncallback=1")
+
+            .then(function (response) {
+                if (response.status !== 200) {
+                    console.log("Probleme avec la requete pour trouver les photos. Code de status : " + response.status);
+                    return;
+                }
+
+                return response.json();
+            })
+    }
+
+    /**
      * Trouve des informations sur une photo
      * @param idPhoto Id de la photo
      * @param secretPhoto Secret de la photo
@@ -52,9 +74,7 @@ class Fetch {
                 }
 
                 // Pas d'erreur
-                response.json().then(function (data) {
-                    return data;
-                })
+                return response.json();
             })
     }
 }
