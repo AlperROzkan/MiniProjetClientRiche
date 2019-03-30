@@ -37,7 +37,6 @@ class Fetch {
      * Recherche de photos
      * @param nomCommune Le mot clé de la photo, pour nous, ce sera le nom de la commune
      * @param nbPhotos le nombre de photos que l'on souhaite
-     * NON FONCTIONNELLE
      */
     static searchPhoto(nomCommune, nbPhotos) {
         fetch("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca403b53ea426ebac5643c0211488a76" +
