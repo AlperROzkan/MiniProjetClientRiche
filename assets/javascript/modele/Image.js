@@ -3,24 +3,32 @@ class Image {
         this.title = title;
         this.farm_id = farm_id;
         this.server_id = server_id;
-        this._id = id;
-        this._secret = secret;
-    }
-
-    getUrl() {
-        return "https://farm" + this.farm_id + ".staticflickr.com/" + this.server_id + "/" + this._id + "_" + this._secret + ".jpg";
+        this.id = id;
+        this.secret = secret;
     }
 
     getTitle() {
         return this.title.toString();
     }
 
+    getFarmId() {
+        return this.farm_id;
+    }
+
+    getServerId() {
+        return this.server_id;
+    }
+
     getId() {
-        return this._id;
+        return this.id;
     }
 
     getSecret() {
-        return this._secret;
+        return this.secret;
+    }
+
+    getUrl() {
+        return "https://farm" + this.farm_id + ".staticflickr.com/" + this.server_id + "/" + this.id + "_" + this.secret + ".jpg";
     }
 
     /**

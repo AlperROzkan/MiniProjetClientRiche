@@ -32,42 +32,55 @@ $(document).ready(function () {
                 }
 
                 response.json().then(function (data) {
+
+
+
                     let i = 0;
                     // Nous parcourons le resultat de la requete pour recuperer les infos dont nous avons besoins
                     data.photos.photo.forEach(function (photo) {
 
+
                         // Nous gardons les images en mémoire pour utilisation plus tard
                         let monImage = new Image(photo.title, photo.farm, photo.server, photo.id, photo.secret);
 
-                        // Nous ajontons les images dans la page.
+                        // Pour recuperer d'autres informations a propos de photos
+                        Fetch.getInfoPhoto(monImage.getId(), monImage.getSecret()).then(function (data) {
+                            monImage.setTimestamp(data.photo.dates.taken);
+                            monImage.setAuthor(data.photo.owner.username);
+                        });
+
+                        // Nous ajoutons les images dans la page.
                         $("#photo").append("<img alt=imageRequete" + i + " id=image" + i + " src=" + monImage.getUrl() + "/>");
 
                         // La boite de dialogue
                         $("#dialogImg").dialog({autoOpen: false});
                         $("#image" + i).click(function () {
-                            $("#dialogImg")
-                                .dialog("open")
+                            $("#dialogImg").dialog("open")
                                 .dialog({
                                     title: monImage.getTitle()
                                 })
-                                .empty();
+                                .empty()
+                                // Ici on rajoute des infos sur la boite de dialogue
+                                .append("<div>Timestamp de prise de vue: " + monImage.getTimestamp() + "</div>")
+                                .append("<div>Pseudo de l'uploader : " + monImage.getAuthor() + "</div>");;
 
-                            // Pour recuperer des informations a propos de photos
-                            Fetch.getInfoPhoto(monImage.getId(), monImage.getSecret())
-                                .then(function (data) {
-
-                                    monImage.setTimestamp(data.photo.dates.taken);
-                                    monImage.setAuthor(data.photo.owner.username);
-
-                                    // Ici on rajoute des infos sur la boite de dialogue
-                                    $("#dialogImg")
-                                        .append("<div>Timestamp de prise de vue: " + monImage.getTimestamp() + "</div>")
-                                        .append("<div>Pseudo de l'uploader : " + monImage.getAuthor() + "</div>");
-                                })
                         });
                         mesImages.add(monImage);
                         i++;
-                    })
+                    });
+
+                    // Datatables ici car on veut avoir des infos une fois que les photos seront venues
+                    let t = $('#example').DataTable();
+                    mesImages.getEveryImage().forEach((element) => {
+                        t.row.add([
+                            element.getTitle(),
+                            element.getFarmId(),
+                            element.getServerId(),
+                            element.getId(),
+                            element.getSecret()
+                        ]).draw(false);
+                    });
+
                 })
             })
             .catch(function (err) {
