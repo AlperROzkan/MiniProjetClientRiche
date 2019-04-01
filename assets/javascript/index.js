@@ -13,8 +13,7 @@ $(document).ready(function () {
         active: 0
     });
 
-    let date;
-
+    let date; // La date que l'on va utiliser
     // La date que l'on peut choisir
     $("#datepicker").datepicker({
         onSelect: (dateText, inst) => {
@@ -55,7 +54,9 @@ $(document).ready(function () {
 
                         }).then(() => {
                             // Datatables ici car on veut avoir des infos une fois que les photos seront venues
-                            let t = $('#example').DataTable();
+                            let t = $('#datatable').show().DataTable();
+
+                            t.clear();
                             mesImages.getEveryImage().forEach((element) => {
                                 // On remplit les tables avec des infos de chaque photo
                                 t.row.add([

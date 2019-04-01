@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+
+
 </head>
 <body>
 
 <link rel="stylesheet" href="../assets/css/database.css">
+
 
 
 <script rel="script" src="../assets/javascript/modele/Fetch.js"></script>
@@ -23,6 +26,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script src="https://cdn.datatables.net/1.10.18/js/dataTables.jqueryui.min.js"></script>
+
 
 <form action="" method="GET">
     <label for="nomCommune">Nom Commune</label>
@@ -54,7 +58,7 @@
     </div>
 
     <div id="table">
-        <table id="example" class="display" style="width:100%">
+        <table hidden id="datatable" class="display" style="width:100%">
             <thead>
             <tr>
                 <th>Titre</th>
@@ -66,6 +70,7 @@
                 <th>secret</th>
             </tr>
             </thead>
+            <tbody id="bodyTable"></tbody>
             <tfoot>
             <tr>
                 <th>Titre</th>
@@ -78,9 +83,6 @@
             </tr>
             </tfoot>
         </table>
-        <button id="addRow">Add new row</button>
-
-
     </div>
 </div>
 
