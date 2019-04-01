@@ -13,20 +13,25 @@ $(document).ready(function () {
         active: 0
     });
 
+    let date;
+
     // La date que l'on peut choisir
-    $( "#datepicker" ).datepicker();
+    $("#datepicker").datepicker({
+        onSelect: (dateText, inst) => {
+            date = dateText;
+        }
+    });
 
     // Au clic sur l'icone
     $("#boutonRecherche").click(function () {
         mesImages = new Images(); // Une liste d'images qui contiendra les images qu'on recupère du fetch
         $("#photo").empty(); // On vide les images avant d'en ajouter de nouvelles
-
-
-
         // On retrouve les photos
-        fetch("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca403b53ea426ebac5643c0211488a76" +
+        fetch("https://api.flickr.com/services/rest/?method=flickr.photos.search" +
+            "&api_key=ca403b53ea426ebac5643c0211488a76" +
             "&tags=" + $("#nomCommune").val() +
             "&per_page=" + $("#nbPhotos").val() +
+            "&min_taken_date=" + date +
             "&format=json&nojsoncallback=1")
 
             .then(function (response) {
@@ -42,18 +47,17 @@ $(document).ready(function () {
                         // Nous gardons les images en mémoire pour utilisation plus tard
                         let monImage = new Image(photo.title, photo.farm, photo.server, photo.id, photo.secret);
 
-                        // Pour recuperer d'autres informations en plus a propos de photos et les ajouter dans les images
+                        // Pour recuperer d'autres informations en plus a propos de photos et les ajouter dans les images (classe Fetch)
                         Fetch.getInfoPhoto(monImage.getId(), monImage.getSecret()).then((data) => {
                             monImage.setTimestamp(data.photo.dates.taken);
                             monImage.setAuthor(data.photo.owner.username);
                             mesImages.add(monImage);
 
                         }).then(() => {
-                            console.log(1, monImage.getTimestamp());
-
                             // Datatables ici car on veut avoir des infos une fois que les photos seront venues
                             let t = $('#example').DataTable();
                             mesImages.getEveryImage().forEach((element) => {
+                                // On remplit les tables avec des infos de chaque photo
                                 t.row.add([
                                     element.getTitle(),
                                     element.getAuthor(),
@@ -88,9 +92,5 @@ $(document).ready(function () {
             .catch(function (err) {
                 console.log("Erreur de Fetch sur la recherche et l'affichage d'image");
             });
-
-
     });
-
-
 });
