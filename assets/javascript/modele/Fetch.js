@@ -5,11 +5,14 @@ class Fetch {
 
     /**
      * Remplit les sugestions avec des noms de communes
+     * Avec l'api du gouvernement
      * @param req
      * @param response
      */
     static autocompleteNomsCommunes(req, response) {
-        fetch("https://geo.api.gouv.fr/communes?nom=" + $("#nomCommune").val() + "&fields=departement&boost=population")
+        fetch("https://geo.api.gouv.fr/communes" +
+            "?nom=" + $("#nomCommune").val() +
+            "&fields=departement&boost=population") // Boost donne les communes les plus peuplées
             .then(
                 function (responseFetch) {
                     // Si on ne recoit rien

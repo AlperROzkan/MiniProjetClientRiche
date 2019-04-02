@@ -30,7 +30,7 @@ $(document).ready(function () {
             "&api_key=ca403b53ea426ebac5643c0211488a76" +
             "&tags=" + $("#nomCommune").val() +
             "&per_page=" + $("#nbPhotos").val() +
-            "&min_taken_date=" + date +
+            "&min_taken_date=" + $("#datepicker").val() +
             "&format=json&nojsoncallback=1")
 
             .then(function (response) {
