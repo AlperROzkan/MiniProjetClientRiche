@@ -31,6 +31,7 @@ $(document).ready(function () {
         // On initialise une datatables
         let t = $('#datatable').show().DataTable();
 
+
         mesImages = new Images(); // Une liste d'images qui contiendra les images qu'on recupère du fetch
         $("#photo").empty(); // On vide les images avant d'en ajouter de nouvelles
         // On retrouve les photos
